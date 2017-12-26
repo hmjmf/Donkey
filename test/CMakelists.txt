@@ -1,0 +1,18 @@
+add_subdirectory(gtest)
+include_directories(${PROJECT_SOURCE_DIR}/src/gtest)
+include_directories(${PROJECT_SOURCE_DIR}/include/donkey)
+include_directories(${PROJECT_SOURCE_DIR}/include/donkey/test)
+
+file(GLOB test_srcs  ${PROJECT_SOURCE_DIR}/test/test_*.cpp)
+
+message(${test_srcs})
+#
+#set(EXECUTABLE_OUTPUT_PATH ../build/bin)
+#
+add_executable(runTest ${test_srcs})
+target_link_libraries(runTest gtest gtest_main donkey)
+
+
+
+
+

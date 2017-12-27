@@ -2,23 +2,36 @@
 // Created by 启翔 张 on 2017/12/26.
 //
 
-#include <cmath>
+
 #include "util/hash.hpp"
 
 namespace Donkey{
 
-std::string hash(std::string const &src, std::string const salt, HASE_TYPE const hash_type){
+DONKEY_EXPORT std::string hash_to_string(std::string src, std::string const salt, HASE_TYPE const hash_type){
     if (src.empty()) {
         return "";
     }
-    std::string input = src;
     if (!salt.empty()){
-        input += salt;
+        src += salt;
     }
     md5 encode_obj;
-    std::string ret = encode_obj.Encode(input);
+    std::string ret = encode_obj.Encode(src);
     return ret;
 };
+DONKEY_EXPORT uint32_t hash_to_uint(std::string src, std::string const salt, HASE_TYPE const hash_type){
+    if (src.empty()) {
+        return 0;
+    }
+    if (!salt.empty()){
+        src += salt;
+    }
+    md5 encode_obj;
+    uint32_t  ret = encode_obj.Encode_uint(src);
+
+    return ret;
+};
+
+
 
 
 
@@ -175,21 +188,7 @@ void md5::RotationCalculate(char *data_512_ptr, ParamDynamic & param) {
 }
 
 
-std::string md5::GetHexStr(unsigned int num_str) {
-    std::string hexstr = "";
-    char szch[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    unsigned char *tmptr = (unsigned char *)&num_str;
-    int len = sizeof(num_str);
-    // 小端字节序，逆序打印
-    for (int i = 0; i < len; i++){
-        unsigned char ch = tmptr[i] & 0xF0;
-        ch = ch >> 4;
-        hexstr.append(1, szch[ch]);
-        ch = tmptr[i] & 0x0F;
-        hexstr.append(1, szch[ch]);
-    }
-    return hexstr;
-}
+
 
 std::string md5::Encode(std::string src_info) {
     ParamDynamic param;
@@ -209,10 +208,32 @@ std::string md5::Encode(std::string src_info) {
     if (NULL != out_data_ptr) {
         delete[] out_data_ptr, out_data_ptr =  NULL;
     }
-    result.append(GetHexStr(param.ua_));
-    result.append(GetHexStr(param.ub_));
-    result.append(GetHexStr(param.uc_));
-    result.append(GetHexStr(param.ud_));
+    result.append(Donkey::coding::uint_to_hex_str(param.ua_));
+    result.append(Donkey::coding::uint_to_hex_str(param.ub_));
+    result.append(Donkey::coding::uint_to_hex_str(param.uc_));
+    result.append(Donkey::coding::uint_to_hex_str(param.ud_));
+    return result;
+}
+uint32_t md5::Encode_uint(std::string src_info) {
+    ParamDynamic param;
+    param.ua_ = kA;
+    param.ub_ = kB;
+    param.uc_ = kC;
+    param.ud_ = kD;
+    uint32_t result = 0;
+    const char *src_data = src_info.c_str();
+    char *out_data_ptr = NULL;
+    int total_byte = FillData(src_data, strlen(src_data), &out_data_ptr);
+    char * data_BIT_OF_GROUP = out_data_ptr;
+    for (int i = 0; i < total_byte / (BIT_OF_GROUP / BIT_OF_BYTE); ++i) {
+        data_BIT_OF_GROUP += i*(BIT_OF_GROUP / BIT_OF_BYTE);
+        RotationCalculate(data_BIT_OF_GROUP, param);
+    }
+    if (NULL != out_data_ptr) {
+        delete[] out_data_ptr, out_data_ptr =  NULL;
+    }
+    result += param.ua_ / 4 + param.ub_ / 4 + param.uc_ / 4 + param.ud_ / 4;
+
     return result;
 }
 

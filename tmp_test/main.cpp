@@ -7,9 +7,10 @@
 #include <unistd.h>
 #include <fstream>
 #include <signal.h>
-#include "../include/donkey/util/bloom.hpp"
+
 int main(int argc, char** argv,  char *envp[]) {
-    std::cout << t() << std::endl;
+    char* lookup_list = new char [123];
+    std::cout << std::string(lookup_list) << std::endl;
 
 
 

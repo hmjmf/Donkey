@@ -1084,7 +1084,7 @@ When asking a question, it's helpful to provide as much of the
 following information as possible (people cannot help you if there's
 not enough information in your question):
 
-  * the version (or the commit hash if you check out from Git directly) of Google Test you use (Google Test is under active development, so it's possible that your problem has been solved in a later version),
+  * the version (or the commit hash_to_string if you check out from Git directly) of Google Test you use (Google Test is under active development, so it's possible that your problem has been solved in a later version),
   * your operating system,
   * the name and version of your compiler,
   * the complete command line flags you give to your compiler,

@@ -969,7 +969,7 @@ will output XML like this:
 
 ```
 ...
-  <testcase name="MinAndMaxWidgets" status="run" time="6" classname="WidgetUsageTest"
+  <testcase name="MinAndMaxWidgets" status="run" time="6" __classname__="WidgetUsageTest"
             MaximumWidgets="12"
             MinimumWidgets="9" />
 ...
@@ -977,7 +977,7 @@ will output XML like this:
 
 _Note_:
   * `RecordProperty()` is a static member of the `Test` class. Therefore it needs to be prefixed with `::testing::Test::` if used outside of the `TEST` body and the test fixture class.
-  * `key` must be a valid XML attribute name, and cannot conflict with the ones already used by Google Test (`name`, `status`, `time`, `classname`, `type_param`, and `value_param`).
+  * `key` must be a valid XML attribute name, and cannot conflict with the ones already used by Google Test (`name`, `status`, `time`, `__classname__`, `type_param`, and `value_param`).
   * Calling `RecordProperty()` outside of the lifespan of a test is allowed. If it's called outside of a test but between a test case's `SetUpTestCase()` and `TearDownTestCase()` methods, it will be attributed to the XML element for the test case. If it's called outside of all test cases (e.g. in a test environment), it will be attributed to the top-level XML element.
 
 _Availability_: Linux, Windows, Mac.
@@ -2004,15 +2004,15 @@ could generate this report:
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="3" failures="1" errors="0" time="35" name="AllTests">
   <testsuite name="MathTest" tests="2" failures="1" errors="0" time="15">
-    <testcase name="Addition" status="run" time="7" classname="">
+    <testcase name="Addition" status="run" time="7" __classname__="">
       <failure message="Value of: add(1, 1)&#x0A; Actual: 3&#x0A;Expected: 2" type=""/>
       <failure message="Value of: add(1, -1)&#x0A; Actual: 1&#x0A;Expected: 0" type=""/>
     </testcase>
-    <testcase name="Subtraction" status="run" time="5" classname="">
+    <testcase name="Subtraction" status="run" time="5" __classname__="">
     </testcase>
   </testsuite>
   <testsuite name="LogicTest" tests="1" failures="0" errors="0" time="5">
-    <testcase name="NonContradiction" status="run" time="5" classname="">
+    <testcase name="NonContradiction" status="run" time="5" __classname__="">
     </testcase>
   </testsuite>
 </testsuites>

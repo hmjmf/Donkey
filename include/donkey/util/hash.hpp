@@ -8,7 +8,9 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <cmath>
+#include "Donkey.hpp"
 #include <string>
+#include "coding.hpp"
 
 #define UInt32 unsigned int
 #define BIT_OF_BYTE  8
@@ -30,10 +32,11 @@ namespace Donkey {
 enum HASE_TYPE{
     MD5
 };
-std::string hash(std::string const &src, std::string const salt = "", HASE_TYPE const hash_type = HASE_TYPE::MD5);
+DONKEY_EXPORT std::string hash_to_string(std::string src, std::string const salt = "", HASE_TYPE const hash_type = HASE_TYPE::MD5);
+DONKEY_EXPORT uint32_t hash_to_uint(std::string src, std::string const salt = "", HASE_TYPE const hash_type = HASE_TYPE::MD5);
 
 
-class md5{
+class md5 final{
 public:
     struct ParamDynamic{
         UInt32 ua_;
@@ -44,6 +47,7 @@ public:
 public:
     md5() {}
     std::string Encode(std::string src_info);
+    uint32_t Encode_uint(std::string src_info);
 protected:
     UInt32 CycleMoveLeft(UInt32 src_num, int bit_num_to_move);
     UInt32 FillData(const char *in_data_ptr, int data_byte_len, char** out_data_ptr);
@@ -52,7 +56,7 @@ protected:
     void RoundH(char *data_512_ptr, ParamDynamic & param);
     void RoundI(char *data_512_ptr, ParamDynamic & param);
     void RotationCalculate(char *data_512_ptr, ParamDynamic & param);
-    std::string GetHexStr(unsigned int num_str);
+
 private:
     // 幻数定义
     static const int kA;

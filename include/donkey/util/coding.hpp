@@ -4,10 +4,16 @@
 #ifndef PROJECT_CODING_HPP
 #define PROJECT_CODING_HPP
 
+#include <sstream>
+
 namespace Donkey{
-typedef unsigned int uint32;
-std::string uint32_2_hexstr(uint32 const &src);
-uint32 hexstr_2_uint32(std::string const &src);
+namespace coding{
+
+
+std::string uint_to_hex_str(unsigned int num);
+
+
+}
 }
 
 #endif //PROJECT_CODING_HPP

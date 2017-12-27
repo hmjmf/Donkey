@@ -6,12 +6,12 @@ include_directories(${PROJECT_SOURCE_DIR}/include/donkey/test)
 file(GLOB test_srcs  ${PROJECT_SOURCE_DIR}/test/test_*.cpp)
 
 message(${test_srcs})
-#
-#set(EXECUTABLE_OUTPUT_PATH ../build/bin)
-#
+
+find_package(Glog REQUIRED)
+
 add_executable(runTest ${test_srcs})
 target_link_libraries(runTest gtest gtest_main donkey)
-
+target_link_libraries(runTest glog::glog)
 
 
 

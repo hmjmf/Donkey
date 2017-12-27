@@ -7,5 +7,14 @@
 #include "util/coding.hpp"
 
 TEST(TEST_CODING,base){
-    EXPECT_EQ(1,1);
+    int d;
+
+    std::string salary;
+
+    std::string s="12";
+    std::stringstream stream;
+    stream << s;
+    stream >> d;
+    EXPECT_EQ(d,12);
+
 }

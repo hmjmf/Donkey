@@ -7,14 +7,18 @@
 #include "util/coding.hpp"
 
 TEST(TEST_CODING,base){
-    int d;
+    EXPECT_EQ(Donkey::coding::to_str(11), "11");
+    EXPECT_EQ(Donkey::coding::to_str(11.11), "11.11");
 
-    std::string salary;
+    EXPECT_EQ(Donkey::coding::to_int("11"), 11);
+    EXPECT_EQ(Donkey::coding::to_int("11.11"), 11);
 
-    std::string s="12";
-    std::stringstream stream;
-    stream << s;
-    stream >> d;
-    EXPECT_EQ(d,12);
+    EXPECT_DOUBLE_EQ(Donkey::coding::to_int("11"), 11.0);
+    EXPECT_DOUBLE_EQ(Donkey::coding::to_double("11.11"), 11.11);
+
+
+    EXPECT_EQ(Donkey::coding::convert_to<int>("11.11"), 11);
+    EXPECT_EQ(Donkey::coding::convert_to<std::string>(11), "11");
+
 
 }

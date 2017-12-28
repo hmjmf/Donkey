@@ -10,16 +10,25 @@
 #include <thread>
 
 void dosm(){
-    while (1) {
-        std::cout << 1 << std::endl;
+    for (int i = 0; i < 10; i++){
+        sleep(1);
+        std::cout << i << std::endl;
+    }
+}
+void dosmel(){
+    for (int i = 10; i < 20; i++){
+        sleep(1);
+        std::cout << i << std::endl;
     }
 }
 
 int main(int argc, char** argv,  char *envp[]) {
 
 
-    std::thread my_t(dosm);
-    my_t.detach();
-
+    std::thread my_t1(dosm);
+    std::thread my_t2(dosmel);
+    my_t1.join();
+    my_t2.join();
+    std::cout << "end" << std::endl;
     return 0;
 }

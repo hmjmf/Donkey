@@ -35,28 +35,52 @@ TEST(TEST_BLOOM,base){
 
 }
 
-void addKey(std::string str, std::shared_ptr<Donkey::BloomFilter> bloom){
-    bloom -> addKey(str);
+void addKey(std::vector<std::string> strs, std::shared_ptr<Donkey::BloomFilter> bloom){
+    for (auto i = strs.begin(); i != strs.end(); i++){
+        bloom -> addKey(*i);
+    }
 }
 
 
 TEST(TEST_BLOOM,multithreading){
 
-    auto b =  Donkey::BloomFilter::create(1024, 6);
+    auto b =  Donkey::BloomFilter::create(102400, 6);
 
+    std::vector<std::vector<std::string>> strs_in_bloom_vector;
+    std::vector<std::string> strs_not_in_bloom;
 
-    b->addKey("1234");
-    b->addKey("2345");
-    b->addKey("3456789");
-    b->addKey("aweas");
-    b->addKey("ccstg");
+    for (int i = 0; i < 5; i++) {
+        std::vector<std::string> strs_in_bloom;
+        for (int j = 0; j < 256; j++) {
+            strs_in_bloom.push_back(
+                    Donkey::random::random_string(Donkey::random::uniform(10, 50), true, true, true, true));
+            strs_not_in_bloom.push_back(
+                    Donkey::random::random_string(Donkey::random::uniform(10, 50), true, true, true, true));
+        }
+        strs_in_bloom_vector.push_back(strs_in_bloom);
+    }
 
-    EXPECT_EQ(b->keyMayMatch("1234"), true);
-    EXPECT_EQ(b->keyMayMatch("2345"), true);
-    EXPECT_EQ(b->keyMayMatch("ccstg"), true);
+    std::vector<std::thread*> threads;
+    for (auto i = strs_in_bloom_vector.begin(); i != strs_in_bloom_vector.end(); i++) {
+        threads.push_back(new std::thread(addKey, *i, b));
+    }
 
-    EXPECT_EQ(b->keyMayMatch("cggg"), false);
-    EXPECT_EQ(b->keyMayMatch("cddd"), false);
-    EXPECT_EQ(b->keyMayMatch(""), false);
+    for (auto i = threads.begin(); i != threads.end(); i++){
+        (*i)->join();
+    }
+
+    for (auto i = strs_in_bloom_vector.begin(); i != strs_in_bloom_vector.end(); i++) {
+        for (auto j = i -> begin(); j != i -> end(); j++){
+            EXPECT_EQ(b->keyMayMatch(*j), true);
+        }
+
+    }
+    for (std::vector<std::string>::const_iterator i = strs_not_in_bloom.begin(); i != strs_not_in_bloom.end(); i++){
+        EXPECT_EQ(b->keyMayMatch(*i), false); //not in
+    }
+
+    for (auto i = threads.begin(); i != threads.end(); i++){
+        delete *i;
+    }
 }
 

@@ -13,18 +13,18 @@ std::string num_s = "1234567890";
 std::string special_s = "!@#$%^&*()_+=-[]{}|;:.,<>/?";
 
 
-DONKEY_EXPORT int uniform(int min, int max ){
+int uniform(int min, int max ){
     CHECK_LE(min, max) << "min > max";
     std::uniform_int_distribution<int> distr(min, max);
     return distr(gen);
 }
-DONKEY_EXPORT double normal(int m, int s){
+double normal(int m, int s){
     std::normal_distribution<double> distr(m, s);
     return distr(gen);
 }
 
 
-DONKEY_EXPORT std::string random_string(const uint length, bool lower,
+std::string random_string(const uint length, bool lower,
                                         bool caps , bool num,
                                         bool special){
     CHECK(lower || caps || num || special)

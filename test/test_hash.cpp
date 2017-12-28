@@ -6,8 +6,6 @@
 #include "gtest/gtest.h"
 #include "util/hash.hpp"
 
-
-
 TEST(HASH_MD5,base){
     EXPECT_EQ(Donkey::hash_to_string("TESTMD5"),Donkey::hash_to_string("TESTMD5"));
     EXPECT_EQ(Donkey::hash_to_string("TESTMD5"),"ae05741a93699a5c4d7bb1744aa9a1b0");

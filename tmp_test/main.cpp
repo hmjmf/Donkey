@@ -7,13 +7,19 @@
 #include <unistd.h>
 #include <fstream>
 #include <signal.h>
+#include <thread>
+
+void dosm(){
+    while (1) {
+        std::cout << 1 << std::endl;
+    }
+}
 
 int main(int argc, char** argv,  char *envp[]) {
-    char* lookup_list = new char [123];
-    std::cout << std::string(lookup_list) << std::endl;
 
 
-
+    std::thread my_t(dosm);
+    my_t.detach();
 
     return 0;
 }

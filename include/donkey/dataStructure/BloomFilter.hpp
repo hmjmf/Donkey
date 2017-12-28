@@ -8,6 +8,7 @@
 #include "Donkey.hpp"
 #include "util/hash.hpp"
 #include "glog/logging.h"
+
 namespace Donkey{
 
 struct position{

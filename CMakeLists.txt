@@ -16,7 +16,7 @@ include_directories(${PROJECT_BINARY_DIR})
 
 add_subdirectory(src/donkey)
 add_subdirectory(test)
-add_subdirectory(tmp_tesT)
+add_subdirectory(tmp)
 
 
 

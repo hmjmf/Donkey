@@ -27,4 +27,13 @@ private: \
     DISABLE_COPY_AND_ASSIGN(__classname__)
 
 
+#define DEFAULT_SHARE_PTR_FACTORY(__classname__) \
+public:\
+    static std::shared_ptr<__classname__> create(){ \
+        return std::shared_ptr<__classname__>(new __classname__());\
+    }   \
+private:\
+    __classname__()
+
+
 #endif //PROJECT_COMMENT_HPP

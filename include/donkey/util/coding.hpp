@@ -9,27 +9,27 @@
 
 namespace Donkey{
 namespace coding{
-template <typename __out_type__, typename __in_type__>
-DONKEY_EXPORT __out_type__& convert_to(const __in_type__& input){
+template <typename out_t, typename in_t>
+DONKEY_EXPORT out_t& convert_to(const in_t& input){
     std::stringstream ss;
-    __out_type__ out;
+    out_t out;
     ss << input;
     ss >> out;
     return out;
 }
 
-template <typename __type__>
-DONKEY_EXPORT std::string& to_str(const __type__& input){
+template <typename in_t>
+DONKEY_EXPORT std::string& to_str(const in_t& input){
     return convert_to<std::string>(input);
 }
 
-template <typename __type__>
-DONKEY_EXPORT int to_int(const __type__& input){
+template <typename in_t>
+DONKEY_EXPORT int to_int(const in_t& input){
     return convert_to<int>(input);
 }
 
-template <typename __type__>
-DONKEY_EXPORT double to_double(const __type__& input){
+template <typename in_t>
+DONKEY_EXPORT double to_double(const in_t& input){
     return convert_to<double>(input);
 }
 

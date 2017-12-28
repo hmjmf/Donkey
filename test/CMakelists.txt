@@ -3,9 +3,13 @@ include_directories(${PROJECT_SOURCE_DIR}/src/gtest)
 include_directories(${PROJECT_SOURCE_DIR}/include/donkey)
 include_directories(${PROJECT_SOURCE_DIR}/include/donkey/test)
 
-file(GLOB test_srcs  ${PROJECT_SOURCE_DIR}/test/test_*.cpp)
+file(GLOB test_srcs
+        ${PROJECT_SOURCE_DIR}/test/test_*.cpp
+        ${PROJECT_SOURCE_DIR}/test/dataStructure/test_*.cpp
+        ${PROJECT_SOURCE_DIR}/test/util/test_*.cpp)
 
-message(${test_srcs})
+
+
 
 find_package(Glog REQUIRED)
 

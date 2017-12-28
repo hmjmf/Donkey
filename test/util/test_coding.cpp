@@ -19,6 +19,4 @@ TEST(TEST_CODING,base){
 
     EXPECT_EQ(Donkey::coding::convert_to<int>("11.11"), 11);
     EXPECT_EQ(Donkey::coding::convert_to<std::string>(11), "11");
-
-
 }

@@ -79,10 +79,10 @@
       <BuildOrder>1</BuildOrder>
     </CppCompile>
     <BuildConfiguration Include="Debug">
-      <Key>Cfg_1</Key>
+      <Key_t>Cfg_1</Key_t>
     </BuildConfiguration>
     <BuildConfiguration Include="Release">
-      <Key>Cfg_2</Key>
+      <Key_t>Cfg_2</Key_t>
     </BuildConfiguration>
   </ItemGroup>
 </Project>

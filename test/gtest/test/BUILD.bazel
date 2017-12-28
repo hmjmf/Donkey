@@ -39,7 +39,7 @@ licenses(["notice"])
 #on windows exclude gtest-tuple.h and gtest-tuple_test.cc
 cc_test(
     name = "gtest_all_test",
-    size = "small",
+    size_ = "small",
     srcs =  glob(
                     include = [
                         "gtest-*.cc",
@@ -84,7 +84,7 @@ cc_test(
 #These googletest tests have their own main()
 cc_test(
     name = "gtest-listener_test",
-    size = "small",
+    size_ = "small",
     srcs = [
         "gtest-listener_test.cc",
     ],
@@ -95,7 +95,7 @@ cc_test(
 
 cc_test(
     name = "gtest-unittest-api_test",
-    size = "small",
+    size_ = "small",
     srcs = [
         "gtest-unittest-api_test.cc",
     ],
@@ -106,7 +106,7 @@ cc_test(
 
 cc_test(
     name = "gtest-param-test_test",
-    size = "small",
+    size_ = "small",
     srcs = [
         "gtest-param-test2_test.cc",
         "gtest-param-test_test.cc",

@@ -25,4 +25,23 @@ TEST(TEST_RANDOM,base){
 
     EXPECT_EQ(Donkey::random::random_string(15).length(), 15);
     EXPECT_NE(Donkey::random::random_string(15), Donkey::random::random_string(15));
+
+    std::vector<int> v;
+    int arr[100];
+    for (int i = 0; i < 100; i++){
+        v.push_back(i);
+        arr[i] = i;
+    }
+    Donkey::random::shuffle<int>(v);
+    Donkey::random::shuffle<int>(v, v.begin() + 20, v.end() - 20);
+    Donkey::random::shuffle<int>(arr, sizeof(arr) / sizeof(int));
+
+    int diff_num_vector = 0;
+    int diff_num_arr = 0;
+    for (int i = 0; i < 100; i++){
+        diff_num_vector += (v[i] != i);
+        diff_num_arr += (arr[i] != i);
+    }
+    EXPECT_GT(diff_num_vector,50);
+    EXPECT_GT(diff_num_arr,50);
 }

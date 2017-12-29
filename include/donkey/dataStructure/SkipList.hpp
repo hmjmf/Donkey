@@ -11,59 +11,72 @@
 namespace Donkey{
 
 template<typename Key_t>
-class SkipList_Node {
+class SkipList_Node{
 public:
     explicit SkipList_Node(const Key_t& k, const uint height) :
-            key(k),height(height),
-            next_list_(std::shared_ptr<SkipList_Node*>(new SkipList_Node*[height])) {
+            key(k),height(height){
+        next_list_ = new SkipList_Node*[height]();
+        memset(next_list_, 0, sizeof(SkipList_Node*) * height);
+    }
+
+    ~SkipList_Node(){
+        delete[](next_list_);
     }
 
     SkipList_Node* next(int level) {
-        check_level(level);
+        if (level > height || level < 0) return nullptr;
         std::lock_guard<std::mutex> lk(mut_list_);
-        return next_list_.get()[level];
+        return next_list_[level];
     }
 
     void set_next(int level, SkipList_Node* x) {
         check_level(level);
         std::lock_guard<std::mutex> lk(mut_list_);
-        next_list_.get()[level] = x;
+        next_list_[level] = x;
     }
 
-    void set_key(Key_t& k){
-        std::lock_guard<std::mutex> lk(mut_key_);
-        key = k;
-    }
-
-    Key_t& get_key(){
-        std::lock_guard<std::mutex> lk(mut_key_);
+    const Key_t& get_key(){
         return key;
     }
+
+    const uint height;
+
 private:
     inline void check_level(int level){
         CHECK_GE(level, 0) << " level must >= 0";
         CHECK_LT(level, height) << " level must < height";
     }
     Key_t const key;
-    const uint height;
+    SkipList_Node** next_list_;
     std::mutex mut_list_;
-    std::mutex mut_key_;
-    std::shared_ptr<SkipList_Node*> next_list_;
 };
 
 
 
 template <typename Key_t>
-class DONKEY_EXPORT SkipList {
+class DONKEY_EXPORT SkipList final{
 public:
     static std::shared_ptr<SkipList<Key_t>> create(const uint node_max_height_ = 12){
         return std::shared_ptr<SkipList<Key_t>>(new SkipList<Key_t>(node_max_height_));
+    }
+    ~SkipList(){
+        SkipList_Node<Key_t>* x = head_;
+        while (x->next(0) != NULL){
+            SkipList_Node<Key_t>* will_del = x;
+            x = x->next(0);
+            delete(will_del);
+        }
     }
 private:
     explicit SkipList(const uint node_max_height_):
             node_max_height_(node_max_height_){
         CHECK_GT(node_max_height_, 0) << "node_max_height_ must > 0 ";
+        head_ = new SkipList_Node<Key_t>(0, node_max_height_);
+        for (int i = 0; i < node_max_height_; i++) {
+            head_->set_next(i, NULL);
+        }
     }
+
 
 
 public:
@@ -71,7 +84,6 @@ public:
 
     bool contains(const Key_t& key) const;
 
-    template<typename Key_t>
     class iterator {
     public:
         explicit iterator(const SkipList* list);
@@ -88,7 +100,7 @@ public:
 
         void prev();
 
-        void seek(const key_t& target);
+        void seek(const Key_t& target);
 
         void seek_to_first();
 
@@ -96,14 +108,13 @@ public:
 
     private:
         const SkipList* list_;
-        SkipList_Node<key_t>* node_;
+        SkipList_Node<Key_t>* node_;
     };
 
 private:
     const uint node_max_height_;
     SkipList_Node<Key_t>* head_;
 
-    uint16_t max_height_;
 
     SkipList_Node<Key_t>* new_node(const Key_t& key, const uint height);
 
@@ -203,19 +214,19 @@ int SkipList<Key_t>::random_height() {
 }
 
 template<typename Key_t>
-bool SkipList<Key_t>::key_is_after_node(const Key_t &key, SkipList_Node *n) const {
+bool SkipList<Key_t>::key_is_after_node(const Key_t &key, SkipList_Node<Key_t> *n) const {
     // NULL n is considered infinite
     return (n != NULL) && (n->get_key() < key);
 }
 
 template<typename Key_t>
-SkipList_Node* SkipList<Key_t>::find_greater_or_equal(const Key_t &key, SkipList_Node **prev) const {
-    SkipList_Node* x = head_;
-    int level = max_height_ - 1; //todo:: 多线程
+SkipList_Node<Key_t>* SkipList<Key_t>::find_greater_or_equal(const Key_t &key, SkipList_Node<Key_t> **prev) const {
+    SkipList_Node<Key_t>* x = head_;
+    int level = node_max_height_ - 1;
     while (true) {
         CHECK(x == head_ || x->get_key() < key) << "(x == head_ || x->key < key) == false";
-        SkipList_Node* next = x->next(level);
-        if (key_is_after_node(key, next)) {
+        SkipList_Node<Key_t>* next = x->next(level);
+        if (key_is_after_node(key, next)) { // next NULL is considered infinite
             // Keep searching in this list
             x = next;
         } else {
@@ -229,31 +240,77 @@ SkipList_Node* SkipList<Key_t>::find_greater_or_equal(const Key_t &key, SkipList
     }
 }
 template<typename Key_t>
-SkipList_Node* SkipList<Key_t>::find_less_than(const Key_t& key) const{
-
-}
-template<typename Key_t>
-SkipList_Node* SkipList<Key_t>::find_last() const {
-
-}
-
-template<typename Key_t>
-SkipList<Key_t>::SkipList()
-          head_(NewNode(0 /* any key will do */, kMaxHeight)),
-          max_height_(reinterpret_cast<void*>(1)),
-          rnd_(0xdeadbeef) {
-    for (int i = 0; i < kMaxHeight; i++) {
-        head_->SetNext(i, NULL);
+SkipList_Node<Key_t>* SkipList<Key_t>::find_less_than(const Key_t& key) const{
+    SkipList_Node<Key_t>* x = head_;
+    int level = node_max_height_ - 1;
+    while (true) {
+        CHECK(x == head_ || x->get_key() < key) << "(x == head_ || x->key < key) == false";
+        SkipList_Node<Key_t>* next = x->next(level);
+        if (next == NULL || x->get_key() >= key) {
+            if (level == 0) {
+                return x;
+            } else {
+                // Switch to next list
+                level--;
+            }
+        } else {
+            x = next;
+        }
     }
 }
+
+template<typename Key_t>
+SkipList_Node<Key_t>* SkipList<Key_t>::find_last() const {
+    SkipList_Node<Key_t>* x = head_;
+    int level = node_max_height_ - 1;
+    while (true) {
+        SkipList_Node<Key_t>* next = x->next(level);
+        if (next == NULL) {
+            if (level == 0) {
+                return x;
+            } else {
+                // Switch to next list
+                level--;
+            }
+        } else {
+            x = next;
+        }
+    }
+}
+
+
 template<typename Key_t>
 void SkipList<Key_t>::insert(const Key_t& key) {
+    SkipList_Node<Key_t>* prev[node_max_height_];
+    SkipList_Node<Key_t>* x = find_greater_or_equal(key, prev);
+
+    //x is null means tail
+    if (x != NULL && key == x->get_key()) return;
+    CHECK(x == NULL || x == head_ || x->get_key() >= key) << "";
+
+    int height = random_height();
+
+    x = new_node(key, height);
+    for (int i = 0; i < height; i++){
+        x->set_next(i, prev[i]->next(i));
+        prev[i]->set_next(i,x);
+    }
 
 }
 
 template<typename Key_t>
 bool SkipList<Key_t>::contains(const Key_t& key) const {
-
+    SkipList_Node<Key_t>* x = find_greater_or_equal(key, NULL);
+//#ifdef DEBUG
+//    if (key == 1){
+//        std::cout << x << std::endl;
+//        std::cout << x->get_key() << std::endl;
+//        std::cout << head_ << std::endl;
+//        std::cout << head_->get_key() << std::endl;
+//    }
+//#endif
+    if(x == head_) return false;
+    return x!=NULL && x->get_key() == key;
 }
 
 

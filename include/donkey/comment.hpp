@@ -6,6 +6,7 @@
 #define PROJECT_COMMENT_HPP
 
 #define DONKEY_EXPORT
+#define DEBUG
 #define DONKEY_POLICY
 
 
@@ -34,6 +35,13 @@ public:\
     }   \
 private:\
     __classname__()
+
+#define ENABLE_COMPARATOR(__classsname__)\
+bool operator==(const __classsname__& lhs,const __classsname__& rhs);\
+bool operator>=(const __classsname__& lhs,const __classsname__& rhs);\
+bool operator<=(const __classsname__& lhs,const __classsname__& rhs);\
+bool operator>(const __classsname__& lhs,const __classsname__& rhs);\
+bool operator<(const __classsname__& lhs,const __classsname__& rhs)
 
 
 #endif //PROJECT_COMMENT_HPP

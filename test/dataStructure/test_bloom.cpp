@@ -14,7 +14,7 @@
 
 TEST(TEST_BLOOM,base){
 
-    auto b =  Donkey::BloomFilter::create(102400, 6);
+    auto b =  Donkey::BloomFilter::create(10240, 6);
 
     std::vector<std::string> strs_in_bloom;
     std::vector<std::string> strs_not_in_bloom;
@@ -26,12 +26,17 @@ TEST(TEST_BLOOM,base){
     for (std::vector<std::string>::const_iterator i = strs_in_bloom.begin(); i != strs_in_bloom.end(); i++){
         b->addKey(*i);
     }
+
     for (std::vector<std::string>::const_iterator i = strs_in_bloom.begin(); i != strs_in_bloom.end(); i++){
         EXPECT_EQ(b->keyMayMatch(*i), true); //in
     }
+
+    int error_time = 0;
     for (std::vector<std::string>::const_iterator i = strs_not_in_bloom.begin(); i != strs_not_in_bloom.end(); i++){
-        EXPECT_EQ(b->keyMayMatch(*i), false); //not in
+        error_time += (b->keyMayMatch(*i) != false);
+        //EXPECT_EQ(b->keyMayMatch(*i), false); //not in
     }
+    EXPECT_LT(error_time * 1.0 / strs_in_bloom.size() , 0.05);
 
 }
 

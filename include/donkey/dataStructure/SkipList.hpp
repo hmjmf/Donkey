@@ -301,14 +301,6 @@ void SkipList<Key_t>::insert(const Key_t& key) {
 template<typename Key_t>
 bool SkipList<Key_t>::contains(const Key_t& key) const {
     SkipList_Node<Key_t>* x = find_greater_or_equal(key, NULL);
-//#ifdef DEBUG
-//    if (key == 1){
-//        std::cout << x << std::endl;
-//        std::cout << x->get_key() << std::endl;
-//        std::cout << head_ << std::endl;
-//        std::cout << head_->get_key() << std::endl;
-//    }
-//#endif
     if(x == head_) return false;
     return x!=NULL && x->get_key() == key;
 }

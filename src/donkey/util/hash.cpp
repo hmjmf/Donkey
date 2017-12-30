@@ -4,6 +4,8 @@
 
 
 #include "util/hash.hpp"
+#include <string.h>
+
 
 namespace Donkey{
 

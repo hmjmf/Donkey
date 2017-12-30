@@ -8,15 +8,16 @@
 
 TEST(HASH_MD5,base){
     EXPECT_EQ(Donkey::hash_to_string("TESTMD5"),Donkey::hash_to_string("TESTMD5"));
-    EXPECT_EQ(Donkey::hash_to_string("TESTMD5"),"ae05741a93699a5c4d7bb1744aa9a1b0");
-
-    EXPECT_EQ(Donkey::hash_to_uint("TESTMD5"), 1729651956);
     EXPECT_EQ(Donkey::hash_to_uint("TESTMD5"), Donkey::hash_to_uint("TESTMD5"));
-
+    EXPECT_NE(Donkey::hash_to_string("TESTMD5"),"");
+    EXPECT_EQ(Donkey::hash_to_string("TESTMD5").length(),32);
 }
 TEST(HASH_MD5,chinese){
-    EXPECT_EQ(Donkey::hash_to_string("中文测试"),"089b4943ea034acfa445d050c7913e55");
-    EXPECT_EQ(Donkey::hash_to_uint("中文测试"), 1848155542);
+    EXPECT_EQ(Donkey::hash_to_string("中文测试"),Donkey::hash_to_string("中文测试"));
+    EXPECT_NE(Donkey::hash_to_string("中文测试"),"");
+    EXPECT_EQ(Donkey::hash_to_uint("中文测试"), Donkey::hash_to_uint("中文测试"));
+    EXPECT_NE(Donkey::hash_to_uint("中文测试"), 0);
+    EXPECT_EQ(Donkey::hash_to_string("中文测试").length(),32);
 }
 TEST(HASH_MD5,empty){
     EXPECT_EQ(Donkey::hash_to_string(""),"");

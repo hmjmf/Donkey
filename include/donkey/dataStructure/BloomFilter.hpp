@@ -8,6 +8,9 @@
 #include "Donkey.hpp"
 #include "util/hash.hpp"
 #include "glog/logging.h"
+#include <iostream>
+#include <memory>
+#include <mutex>
 
 namespace Donkey{
 

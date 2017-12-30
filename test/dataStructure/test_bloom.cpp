@@ -36,7 +36,7 @@ TEST(TEST_BLOOM,base){
         error_time += (b->keyMayMatch(*i) != false);
         //EXPECT_EQ(b->keyMayMatch(*i), false); //not in
     }
-    EXPECT_LT(error_time * 1.0 / strs_in_bloom.size() , 0.05);
+    EXPECT_LT(error_time * 1.0 / strs_in_bloom.size() , 0.1);
 
 }
 
@@ -80,9 +80,12 @@ TEST(TEST_BLOOM,multithreading){
         }
 
     }
+    int error_time = 0;
     for (std::vector<std::string>::const_iterator i = strs_not_in_bloom.begin(); i != strs_not_in_bloom.end(); i++){
-        EXPECT_EQ(b->keyMayMatch(*i), false); //not in
+        error_time += (b->keyMayMatch(*i) != false);
+        //EXPECT_EQ(b->keyMayMatch(*i), false); //not in
     }
+    EXPECT_LT(error_time * 1.0 / strs_not_in_bloom.size() , 0.1);
 
     for (auto i = threads.begin(); i != threads.end(); i++){
         delete *i;

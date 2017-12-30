@@ -33,7 +33,7 @@ TEST(TEST_RANDOM,base){
         arr[i] = i;
     }
     Donkey::random::shuffle<int>(v);
-    Donkey::random::shuffle<int>(v, v.begin() + 20, v.end() - 20);
+    Donkey::random::shuffle<int>(v.begin() + 20, v.end() - 20);
     Donkey::random::shuffle<int>(arr, sizeof(arr) / sizeof(int));
 
     int diff_num_vector = 0;
@@ -44,4 +44,20 @@ TEST(TEST_RANDOM,base){
     }
     EXPECT_GT(diff_num_vector,50);
     EXPECT_GT(diff_num_arr,50);
+
+    std::vector<int> v2;
+    for (int i = 0; i < 100; i++){
+        v2.push_back(i);
+    }
+    std::vector<int> choose1 = Donkey::random::random_chose<int>(v2.begin(),v2.end(),10);
+    std::vector<int> choose2 = Donkey::random::random_chose<int>(v2.begin(),v2.end(),10);
+    EXPECT_EQ(choose1.size(), 10);
+
+    int diff = 0;
+    for(auto i: Donkey::Range<int>(0,10)){
+        diff += (choose1[i] != choose2[i]);
+    }
+    EXPECT_GT(diff, 5);
+
+
 }

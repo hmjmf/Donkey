@@ -25,13 +25,13 @@ public:
 
     SkipList_Node* next(int level) {
         if (level > height || level < 0) return nullptr;
-        std::lock_guard<std::mutex> lk(mut_list_);
+        //std::lock_guard<std::mutex> lk(mut_list_);
         return next_list_[level];
     }
 
     void set_next(int level, SkipList_Node* x) {
         check_level(level);
-        std::lock_guard<std::mutex> lk(mut_list_);
+        //std::lock_guard<std::mutex> lk(mut_list_);
         next_list_[level] = x;
     }
 
@@ -71,7 +71,7 @@ private:
     explicit SkipList(const uint node_max_height_):
             node_max_height_(node_max_height_){
         CHECK_GT(node_max_height_, 0) << "node_max_height_ must > 0 ";
-        head_ = new SkipList_Node<Key_t>(0, node_max_height_);
+        head_ = new SkipList_Node<Key_t>(Key_t(), node_max_height_); //todo: 0 or Key_t()
         for (int i = 0; i < node_max_height_; i++) {
             head_->set_next(i, NULL);
         }

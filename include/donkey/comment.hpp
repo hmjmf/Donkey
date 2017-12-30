@@ -44,4 +44,6 @@ bool operator>(const __classsname__& lhs,const __classsname__& rhs);\
 bool operator<(const __classsname__& lhs,const __classsname__& rhs)
 
 
+
+
 #endif //PROJECT_COMMENT_HPP

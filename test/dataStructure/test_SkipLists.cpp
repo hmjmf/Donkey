@@ -24,8 +24,6 @@ TEST(TEST_SKIPLISTS, SkipLists_Node_base){
         EXPECT_EQ(node->next(i)->next(100), nullptr);
     }
     EXPECT_EQ(node->get_key(), 10);
-    EXPECT_EQ(node->get_key(), 10);
-    EXPECT_EQ(node->get_key(), 10);
 }
 TEST(TEST_SKIPLISTS, base){
     auto sl = Donkey::SkipList<int>::create();
@@ -62,7 +60,7 @@ TEST(TEST_SKIPLISTS, base_big){
     std::vector<int> v;
 
     for (int i = -1000; i < 1000; i++){
-        v.push_back(i);
+        v.emplace_back(i);
     }
     Donkey::random::shuffle<int>(v);
 
@@ -107,7 +105,7 @@ TEST(TEST_SKIPLISTS, class_obj){
     std::vector<t> v;
 
     for (int i = -1000; i < 1000; i++){
-        v.push_back(t(i));
+        v.emplace_back(t(i));
     }
     Donkey::random::shuffle<t>(v);
 
@@ -138,7 +136,7 @@ TEST(TEST_SKIPLISTS, speed){
 
     clock_t time_v = clock();
     for (int i = min; i <= max; i++){
-        v.push_back(i);
+        v.emplace_back(i);
         std::sort(v.begin(),v.end());
     }
     time_v = clock() - time_v;
@@ -206,36 +204,36 @@ TEST(TEST_SKIPLISTS, multithreading){
 
     std::vector<int> all_num;
     for(auto i : Donkey::Range<int>(0, std::abs(max) + std::abs(min))){
-        all_num.push_back(i);
+        all_num.emplace_back(i);
     }
     Donkey::random::shuffle(all_num);
 
     std::vector<std::vector<int>> in_int_v_v;
     for (auto i : Donkey::Range<int>(0, thread_num)){
-        in_int_v_v.push_back(std::vector<int>());
+        in_int_v_v.emplace_back(std::vector<int>());
     }
 
     std::vector<std::vector<int>> not_in_int_v_v;
     for (auto i : Donkey::Range<int>(0, thread_num)){
-        not_in_int_v_v.push_back(std::vector<int>());
+        not_in_int_v_v.emplace_back(std::vector<int>());
     }
 
     int index=0;
     for(auto i = all_num.begin(); i!= (all_num.end()-all_num.begin())/2 + all_num.begin();i++,index++){
         //in
-        in_int_v_v[index % thread_num].push_back(*i);
+        in_int_v_v[index % thread_num].emplace_back(*i);
 
     }
     index=0;
     for(auto i = (all_num.end()-all_num.begin())/2 + all_num.begin(); i!= all_num.end();i++,index++){
         //not in
-        not_in_int_v_v[index % thread_num].push_back(*i);
+        not_in_int_v_v[index % thread_num].emplace_back(*i);
     }
 //insert
     std::vector<std::thread*> threads_insert;
     clock_t time_MT = clock();
     for (auto i = in_int_v_v.begin(); i != in_int_v_v.end(); i++) {
-        threads_insert.push_back(new std::thread(insert<int>, std::ref(*i), sl));
+        threads_insert.emplace_back(new std::thread(insert<int>, std::ref(*i), sl));
     }
 
     for (auto i : Donkey::Range<int>(0, thread_num)){
@@ -244,20 +242,20 @@ TEST(TEST_SKIPLISTS, multithreading){
 //contains in
     std::vector<std::promise<std::vector<bool>>> in_promiseObj_v;
     for (int i = 0; i < thread_num; i++){
-        in_promiseObj_v.push_back( std::promise<std::vector<bool>>());
+        in_promiseObj_v.emplace_back( std::promise<std::vector<bool>>());
     }
     std::vector<std::future<std::vector<bool>>> in_futureObj_v;
     for (int i = 0; i < thread_num; i++){
-        in_futureObj_v.push_back(in_promiseObj_v[i].get_future());
+        in_futureObj_v.emplace_back(in_promiseObj_v[i].get_future());
     }
 
     std::vector<std::thread> in_thread_v;
     for (int i = 0; i < thread_num; i++){
-        in_thread_v.push_back(std::thread(contains<int>, std::ref(in_int_v_v[i]), sl, std::ref(in_promiseObj_v[i])));
+        in_thread_v.emplace_back(std::thread(contains<int>, std::ref(in_int_v_v[i]), sl, std::ref(in_promiseObj_v[i])));
     }
     std::vector<std::vector<bool>> in_res_v;
     for (int i = 0; i < thread_num; i++){
-        in_res_v.push_back(in_futureObj_v[i].get());
+        in_res_v.emplace_back(in_futureObj_v[i].get());
     }
     for (int i = 0; i < thread_num; i++){
         in_thread_v[i].join();
@@ -273,20 +271,20 @@ TEST(TEST_SKIPLISTS, multithreading){
 //contains not in
     std::vector<std::promise<std::vector<bool>>> not_in_promiseObj_v;
     for (int i = 0; i < thread_num; i++){
-        not_in_promiseObj_v.push_back( std::promise<std::vector<bool>>());
+        not_in_promiseObj_v.emplace_back( std::promise<std::vector<bool>>());
     }
     std::vector<std::future<std::vector<bool>>> not_in_futureObj_v;
     for (int i = 0; i < thread_num; i++){
-        not_in_futureObj_v.push_back(not_in_promiseObj_v[i].get_future());
+        not_in_futureObj_v.emplace_back(not_in_promiseObj_v[i].get_future());
     }
 
     std::vector<std::thread> not_in_thread_v;
     for (int i = 0; i < thread_num; i++){
-        not_in_thread_v.push_back(std::thread(contains<int>, std::ref(not_in_int_v_v[i]), sl, std::ref(not_in_promiseObj_v[i])));
+        not_in_thread_v.emplace_back(std::thread(contains<int>, std::ref(not_in_int_v_v[i]), sl, std::ref(not_in_promiseObj_v[i])));
     }
     std::vector<std::vector<bool>> not_in_res_v;
     for (int i = 0; i < thread_num; i++){
-        not_in_res_v.push_back(not_in_futureObj_v[i].get());
+        not_in_res_v.emplace_back(not_in_futureObj_v[i].get());
     }
     for (int i = 0; i < thread_num; i++){
         not_in_thread_v[i].join();

@@ -27,7 +27,7 @@ struct position BloomFilter::computePosition(uint32_t num) const{
 std::vector<struct position> BloomFilter::computePositions(std::string key) const{
     std::vector<struct position> pos;
     for(uint i = 0; i < hash_time_; i++){
-        pos.push_back(computePosition(hash_to_uint(key)));
+        pos.emplace_back(computePosition(hash_to_uint(key)));
         key = hash_to_string(key);
     }
     return pos;

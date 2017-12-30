@@ -51,11 +51,11 @@ DONKEY_EXPORT std::vector<type>& random_chose(typename std::vector<type>::iterat
     std::vector<type>* res = new std::vector<type>();
     std::vector<uint> index;
     for (auto x : Range<uint>(0,end - begin)){
-        index.push_back(x);
+        index.emplace_back(x);
     }
     shuffle<uint>(index);
     for (auto x : Range<uint>(0, choose_num)){
-        res->push_back(*(begin + index[x]));
+        res->emplace_back(*(begin + index[x]));
     }
 
     return *res;

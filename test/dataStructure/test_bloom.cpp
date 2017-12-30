@@ -20,8 +20,8 @@ TEST(TEST_BLOOM,base){
     std::vector<std::string> strs_not_in_bloom;
 
     for (int i = 0; i < 1024; i++){
-        strs_in_bloom.push_back(Donkey::random::random_string(Donkey::random::uniform(10,50),true,true,true,true));
-        strs_not_in_bloom.push_back(Donkey::random::random_string(Donkey::random::uniform(10,50),true,true,true,true));
+        strs_in_bloom.emplace_back(Donkey::random::random_string(Donkey::random::uniform(10,50),true,true,true,true));
+        strs_not_in_bloom.emplace_back(Donkey::random::random_string(Donkey::random::uniform(10,50),true,true,true,true));
     }
     for (std::vector<std::string>::const_iterator i = strs_in_bloom.begin(); i != strs_in_bloom.end(); i++){
         b->addKey(*i);
@@ -57,17 +57,17 @@ TEST(TEST_BLOOM,multithreading){
     for (int i = 0; i < 5; i++) {
         std::vector<std::string> strs_in_bloom;
         for (int j = 0; j < 1024; j++) {
-            strs_in_bloom.push_back(
+            strs_in_bloom.emplace_back(
                     Donkey::random::random_string(Donkey::random::uniform(10, 50), true, true, true, true));
-            strs_not_in_bloom.push_back(
+            strs_not_in_bloom.emplace_back(
                     Donkey::random::random_string(Donkey::random::uniform(10, 50), true, true, true, true));
         }
-        strs_in_bloom_vector.push_back(strs_in_bloom);
+        strs_in_bloom_vector.emplace_back(strs_in_bloom);
     }
 
     std::vector<std::thread*> threads;
     for (auto i = strs_in_bloom_vector.begin(); i != strs_in_bloom_vector.end(); i++) {
-        threads.push_back(new std::thread(addKey, std::ref(*i), b));
+        threads.emplace_back(new std::thread(addKey, std::ref(*i), b));
     }
 
     for (auto i = threads.begin(); i != threads.end(); i++){

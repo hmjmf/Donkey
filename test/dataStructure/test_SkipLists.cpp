@@ -24,6 +24,8 @@ TEST(TEST_SKIPLISTS, SkipLists_Node_base){
         EXPECT_EQ(node->next(i)->next(100), nullptr);
     }
     EXPECT_EQ(node->get_key(), 10);
+    EXPECT_EQ(node->get_key(), 10);
+    EXPECT_EQ(node->get_key(), 10);
 }
 TEST(TEST_SKIPLISTS, base){
     auto sl = Donkey::SkipList<int>::create();

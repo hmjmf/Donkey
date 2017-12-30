@@ -7,42 +7,56 @@
 #include<utility>     //std::ref
 #include<chrono>      //std::chrono::seconds
 #include<vector>
+#include <sstream>
 
-void initiazer(std::promise<int> &promiseObj){
-    std::cout << "Inside thread: " << std::this_thread::get_id() << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    promiseObj.set_value(35);
+
+template <typename out_t, typename in_t>
+out_t convert_to(const in_t& input){
+    std::stringstream ss;
+    out_t out;
+    ss << input;
+    ss >> out;
+    return out;
 }
 
+template <typename out_t, typename in_t>
+void convert_to(const in_t& input, out_t& out){
+    std::stringstream ss;
+    ss << input;
+    ss >> out;
+}
+
+template <typename in_t>
+std::string to_str(const in_t& input){
+    return convert_to<std::string>(input);
+}
+
+template <typename in_t>
+void to_str(const in_t& input, std::string& out){
+    convert_to<std::string, in_t>(input, out);
+}
+
+
+template <typename in_t>
+int to_int(const in_t& input){
+    return convert_to<int>(input);
+}
+
+template <typename in_t>
+double to_double(const in_t& input){
+    return convert_to<double>(input);
+}
+
+
+std::string& to_str_t(const int& input){
+    std::stringstream ss;
+    std::string out;
+    ss << input;
+    ss >> out;
+    return out;
+}
 int main(){
-//    std::promise<int> promiseObj;
-//    std::future<int> futureObj = promiseObj.get_future();
-//    std::thread th(initiazer, std::ref(promiseObj));
-//
-//    std::cout << futureObj.get() << std::endl;
-//
-//    th.join();
-
-    int num = 8;
-    std::vector<std::promise<int>> promiseObj_v;
-    for (int i = 0; i < num; i++){
-        promiseObj_v.push_back( std::promise<int>());
-    }
-    std::vector<std::future<int>> futureObj_v;
-    for (int i = 0; i < num; i++){
-        futureObj_v.push_back(promiseObj_v[i].get_future());
-    }
-
-    std::vector<std::thread> thread_v;
-    for (int i = 0; i < num; i++){
-        thread_v.push_back(std::thread(initiazer, std::ref(promiseObj_v[i])));
-    }
-    for (int i = 0; i < num; i++){
-        std::cout << futureObj_v[i].get() << std::endl;
-    }
-    for (int i = 0; i < num; i++){
-        thread_v[i].join();
-    }
+    std::cout <<  to_str(11) <<std::endl;
 
 
     return 0;

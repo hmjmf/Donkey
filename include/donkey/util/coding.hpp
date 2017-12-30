@@ -8,9 +8,10 @@
 #include "Donkey.hpp"
 
 namespace Donkey{
-namespace coding{
+namespace coding{ 
+    
 template <typename out_t, typename in_t>
-DONKEY_EXPORT out_t& convert_to(const in_t& input){
+out_t convert_to(const in_t& input){
     std::stringstream ss;
     out_t out;
     ss << input;
@@ -18,9 +19,21 @@ DONKEY_EXPORT out_t& convert_to(const in_t& input){
     return out;
 }
 
+template <typename out_t, typename in_t>
+void convert_to(const in_t& input, out_t& out){
+    std::stringstream ss;
+    ss << input;
+    ss >> out;
+}
+
 template <typename in_t>
-DONKEY_EXPORT std::string& to_str(const in_t& input){
+std::string to_str(const in_t& input){ 
     return convert_to<std::string>(input);
+}
+    
+template <typename in_t>
+void to_str(const in_t& input, std::string& out){
+    convert_to<std::string, in_t>(input, out);
 }
 
 template <typename in_t>

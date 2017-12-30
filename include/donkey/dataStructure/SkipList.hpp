@@ -25,13 +25,11 @@ public:
 
     SkipList_Node* next(int level) {
         if (level > height || level < 0) return nullptr;
-        //std::lock_guard<std::mutex> lk(mut_list_);
         return next_list_[level];
     }
 
     void set_next(int level, SkipList_Node* x) {
         check_level(level);
-        //std::lock_guard<std::mutex> lk(mut_list_);
         next_list_[level] = x;
     }
 
@@ -48,7 +46,6 @@ private:
     }
     Key_t const key;
     SkipList_Node** next_list_;
-    std::mutex mut_list_;
 };
 
 
@@ -136,6 +133,7 @@ private:
 
     SkipList_Node<Key_t>* find_last() const;
 
+    mutable std::mutex mut;
 DISABLE_COPY_AND_ASSIGN(SkipList);
 };
 
@@ -281,6 +279,7 @@ SkipList_Node<Key_t>* SkipList<Key_t>::find_last() const {
 
 template<typename Key_t>
 void SkipList<Key_t>::insert(const Key_t& key) {
+    std::lock_guard<std::mutex> lk(mut);
     SkipList_Node<Key_t>* prev[node_max_height_];
     SkipList_Node<Key_t>* x = find_greater_or_equal(key, prev);
 
@@ -300,6 +299,7 @@ void SkipList<Key_t>::insert(const Key_t& key) {
 
 template<typename Key_t>
 bool SkipList<Key_t>::contains(const Key_t& key) const {
+    std::lock_guard<std::mutex> lk(mut);
     SkipList_Node<Key_t>* x = find_greater_or_equal(key, NULL);
     if(x == head_) return false;
     return x!=NULL && x->get_key() == key;

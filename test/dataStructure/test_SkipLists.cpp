@@ -60,6 +60,8 @@ TEST(TEST_SKIPLISTS, iterator){
     sl -> insert(0);
     sl -> insert(-100);
     sl -> insert(100);
+    sl->insert(1);
+
 
     Donkey::SkipList<int>::iterator it(sl.get());
 
@@ -71,6 +73,12 @@ TEST(TEST_SKIPLISTS, iterator){
     EXPECT_EQ(it.key(), 1);
     it.next();
     EXPECT_EQ(it.key(), 100);
+
+
+    it.prev();
+    EXPECT_EQ(it.key(),1);
+    it.next();
+    EXPECT_EQ(it.key(),100);
 
 }
 TEST(TEST_SKIPLISTS, base_big){

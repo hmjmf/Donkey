@@ -242,9 +242,9 @@ SkipList_Node<Key_t>* SkipList<Key_t>::find_less_than(const Key_t& key) const{
     SkipList_Node<Key_t>* x = head_;
     int level = node_max_height_ - 1;
     while (true) {
-        CHECK(x == head_ || x->get_key() < key) << "(x == head_ || x->key < key) == false";
+        CHECK(x == head_ || x->get_key() < key) << "x>=key,x:"<<x->get_key()<<",key:"<<key;
         SkipList_Node<Key_t>* next = x->next(level);
-        if (next == NULL || x->get_key() >= key) {
+        if (next == NULL || next->get_key() >= key) {
             if (level == 0) {
                 return x;
             } else {

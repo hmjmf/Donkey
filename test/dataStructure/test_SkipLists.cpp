@@ -54,6 +54,25 @@ TEST(TEST_SKIPLISTS, base){
     EXPECT_EQ(sl_str->contains("-100"), true);
     EXPECT_EQ(sl_str->contains("-1"), false);
 }
+TEST(TEST_SKIPLISTS, iterator){
+    auto sl = Donkey::SkipList<int>::create();
+    sl -> insert(1);
+    sl -> insert(0);
+    sl -> insert(-100);
+    sl -> insert(100);
+
+    Donkey::SkipList<int>::iterator it(sl.get());
+
+    it.next();
+    EXPECT_EQ(it.key(),-100);
+    it.next();
+    EXPECT_EQ(it.key(), 0);
+    it.next();
+    EXPECT_EQ(it.key(), 1);
+    it.next();
+    EXPECT_EQ(it.key(), 100);
+
+}
 TEST(TEST_SKIPLISTS, base_big){
     auto sl = Donkey::SkipList<int>::create();
 

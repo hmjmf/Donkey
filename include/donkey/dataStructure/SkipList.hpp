@@ -147,7 +147,7 @@ SkipList_Node<Key_t>* SkipList<Key_t>::new_node(const Key_t& key, const uint hei
 template<typename Key_t>
 inline SkipList<Key_t>::iterator::iterator(const SkipList* list) {
     list_ = list;
-    node_ = NULL;
+    node_ = list -> head_;
 }
 
 template<typename Key_t>

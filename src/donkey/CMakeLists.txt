@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/donkey)
 
 project(donkey)
 
-add_library(donkey SHARED ${hdrs} ${srcs})
+add_library(donkey SHARED ${hdrs} ${srcs} ../../include/donkey/dataStructure/SkipList_bucket.h)
 
 find_package(Glog REQUIRED)
 

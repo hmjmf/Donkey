@@ -81,39 +81,13 @@ public:
 
     bool contains(const Key_t& key) const;
 
-//    class iterator {
-//    public:
-//        explicit iterator(const SkipList* list);
-//
-//        // Returns true if the iterator is positioned at a valid node.
-//        bool valid() const;
-//
-//
-//        // Returns the key at the current position.
-//        // REQUIRES: Valid()
-//        const Key_t& key() const;
-//
-//        void next();
-//
-//        void prev();
-//
-//        void seek(const Key_t& target);
-//
-//        void seek_to_first();
-//
-//        void seek_to_last();
-//
-//    private:
-//        const SkipList* list_;
-//        SkipList_Node<Key_t>* node_;
-//    };
-
     class iterator{
     public:
         iterator(SkipList_Node<Key_t>* node):node_(node){}
         SkipList<Key_t>::iterator& operator++(){
             CHECK(valid()) << "key not valid";
             node_ = node_->next(0);
+            return *this;
         }
         const key_t& operator*(){
             CHECK(valid()) << "key not valid";
@@ -172,60 +146,6 @@ template <typename Key_t>
 SkipList_Node<Key_t>* SkipList<Key_t>::new_node(const Key_t& key, const uint height){
     return new SkipList_Node<Key_t>(key, height);
 }
-
-//template<typename Key_t>
-//inline SkipList<Key_t>::iterator::iterator(const SkipList* list) {
-//    list_ = list;
-//    node_ = list -> head_;
-//}
-//
-//template<typename Key_t>
-//inline bool SkipList<Key_t>::iterator::valid() const {
-//    return node_ != NULL;
-//}
-//
-//
-//template<typename Key_t>
-//inline const Key_t& SkipList<Key_t>::iterator::key() const {
-//    CHECK(valid()) << "key not valid";
-//    return node_->get_key();
-//}
-//
-//template<typename Key_t>
-//inline void SkipList<Key_t>::iterator::next() {
-//    CHECK(valid()) << "key not valid";
-//    node_ = node_->next(0);
-//}
-//
-//template<typename Key_t>
-//inline void SkipList<Key_t>::iterator::prev() {
-//    // Instead of using explicit "prev" links, we just search for the
-//    // last node that falls before key.
-//    CHECK(valid()) << "key not valid";
-//    node_ = list_->find_less_than(node_->get_key());
-//    if (node_ == list_->head_) {
-//        node_ = NULL;
-//    }
-//}
-//
-//template<typename Key_t>
-//inline void SkipList<Key_t>::iterator::seek(const Key_t& target) {
-//    node_ = list_->find_greater_or_equal(target, NULL);
-//}
-//
-//template<typename Key_t>
-//inline void SkipList<Key_t>::iterator::seek_to_first(){
-//    node_ = list_->head_->next(0);
-//}
-//
-//template<typename Key_t>
-//inline void SkipList<Key_t>::iterator::seek_to_last() {
-//    node_ = list_->find_last();
-//    if (node_ == list_->head_) {
-//        node_ = NULL;
-//    }
-//}
-
 
 template<typename Key_t>
 int SkipList<Key_t>::random_height() {

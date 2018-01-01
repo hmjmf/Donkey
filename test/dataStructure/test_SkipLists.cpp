@@ -62,26 +62,11 @@ TEST(TEST_SKIPLISTS, iterator){
     sl -> insert(100);
     sl->insert(1);
 
-
-//    Donkey::SkipList<int>::iterator it(sl.get());
-//
-//    it.next();
-//    EXPECT_EQ(it.key(),-100);
-//    it.next();
-//    EXPECT_EQ(it.key(), 0);
-//    it.next();
-//    EXPECT_EQ(it.key(), 1);
-//    it.next();
-//    EXPECT_EQ(it.key(), 100);
-//
-//
-//    it.prev();
-//    EXPECT_EQ(it.key(),1);
-//    it.next();
-//    EXPECT_EQ(it.key(),100);
-
+    std::vector<int> v = {-100,0,1,100};
+    int index = 0;
     for (Donkey::SkipList<int>::iterator i=sl->begin(); i!=sl->end(); ++i){
-        std::cout << *i << std::endl;
+        EXPECT_EQ(*i ,v[index]);
+        index++;
     }
 
 }

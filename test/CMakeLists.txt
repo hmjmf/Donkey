@@ -13,7 +13,7 @@ file(GLOB test_srcs
 
 find_package(Glog REQUIRED)
 
-add_executable(runTest ${test_srcs} ../include/donkey/dataStructure/SkipList_bucket.h dataStructure/test_SkipLists_bucket.cpp)
+add_executable(runTest ${test_srcs})
 target_link_libraries(runTest gtest gtest_main donkey)
 target_link_libraries(runTest glog::glog)
 

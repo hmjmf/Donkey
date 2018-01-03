@@ -6,7 +6,7 @@
 #include <glog/logging.h>
 #include "SkipList.hpp"
 
-TEST(B,B){
+TEST(B,c){
     Donkey::SkipList<int>t();
     EXPECT_EQ(1,1);
 }

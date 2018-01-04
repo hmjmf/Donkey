@@ -9,8 +9,10 @@
 #define DEBUG
 #define DONKEY_POLICY
 
-#define DONKEY_TEMPLATE_VIS _LIBCPP_TEMPLATE_VIS
-#define DONKEY_INLINE_VISIBILITY _LIBCPP_INLINE_VISIBILITY
+#define THROW_EXCEPTION_AGAIN throw
+#define DONKEY_TEMPLATE_VIS __attribute__ ((__visibility__("default")))
+#define DONKEY_ALWAYS_INLINE __attribute__ ((__visibility__("hidden"), __always_inline__))
+
 
 
 #define DISABLE_COPY_AND_ASSIGN(__classname__) \

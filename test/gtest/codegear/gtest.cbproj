@@ -129,10 +129,10 @@
       <BuildOrder>18</BuildOrder>
     </CppCompile>
     <BuildConfiguration Include="Debug">
-      <Key_t>Cfg_1</Key_t>
+      <Tp>Cfg_1</Tp>
     </BuildConfiguration>
     <BuildConfiguration Include="Release">
-      <Key_t>Cfg_2</Key_t>
+      <Tp>Cfg_2</Tp>
     </BuildConfiguration>
   </ItemGroup>
 </Project>

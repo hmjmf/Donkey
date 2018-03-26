@@ -6,16 +6,26 @@
 #include "util/range.hpp"
 
 TEST(TEST_RANGE,base){
-    int i = 1;
-    for (auto x: Donkey::Range<int>(1,5))
-    {
-        EXPECT_EQ(x, i);
-        i++;
-    }
+  int i = 1;
+  for (auto x: Donkey::Range<int>(1,5))
+  {
+    EXPECT_EQ(x, i);
+    i++;
+  }
 
-    for (auto x: Donkey::Range<int>(5,1))
-    {
-        EXPECT_EQ(true, false);
-    }
+  i = 1;
+//  for (auto x: Donkey::Range<int>(5))
+//  {
+//    EXPECT_EQ(x, i);
+//    i++;
+//  }
+
+  for (auto x: Donkey::Range<int>(5,1))
+  {
+    EXPECT_EQ(true, false);
+  }
+
+
+
 
 }

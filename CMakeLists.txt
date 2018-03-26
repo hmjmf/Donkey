@@ -18,7 +18,7 @@ include_directories(${PROJECT_BINARY_DIR})
 add_subdirectory(src/donkey)
 add_subdirectory(test)
 
-if (EXISTS tmp)
+if(EXISTS ${PROJECT_SOURCE_DIR}/tmp)
     add_subdirectory(tmp)
 endif()
 

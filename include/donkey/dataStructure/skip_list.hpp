@@ -183,7 +183,8 @@ int skip_list<Tp>::random_height() {
   // Increase height with probability 1 in kBranching
   static const unsigned int kBranching = 4;
   int height = 1;
-  while (height < node_max_height_ && ((Donkey::random::uniform(0,1024) % kBranching) == 0)) {
+  while (height < node_max_height_ &&
+         ((Donkey::random::uniform(0,1024) % kBranching) == 0)) {
     height++;
   }
   CHECK_GT(height, 0) << " height must > 0";
@@ -198,11 +199,13 @@ bool skip_list<Tp>::key_is_after_node(const_reference key, node_type *n) const {
 }
 
 template<typename Tp>
-skip_lists_node<Tp>* skip_list<Tp>::find_greater_or_equal(const_reference key, node_type** prev) const {
+skip_lists_node<Tp>* skip_list<Tp>::
+    find_greater_or_equal(const_reference key, node_type** prev) const {
   node_type* x = head_;
   int level = node_max_height_ - 1;
   while (true) {
-    CHECK(x == head_ || x->get_key() < key) << "(x == head_ || x->key < key) == false";
+    CHECK(x == head_ || x->get_key() < key)
+      << "(x == head_ || x->key < key) == false";
     node_type* next = x->next(level);
     if (key_is_after_node(key, next)) { // next NULL is considered infinite
       // Keep searching in this list
@@ -222,7 +225,8 @@ skip_lists_node<Tp>* skip_list<Tp>::find_less_than(const_reference key) const{
   node_type* x = head_;
   int level = node_max_height_ - 1;
   while (true) {
-    CHECK(x == head_ || x->get_key() < key) << "x>=key,x:"<<x->get_key()<<",key:"<<key;
+    CHECK(x == head_ || x->get_key() < key)
+      << "x>=key,x:"<<x->get_key()<<",key:"<<key;
     node_type* next = x->next(level);
     if (next == NULL || next->get_key() >= key) {
       if (level == 0) {

@@ -12,7 +12,7 @@
 #include "gtest/gtest.h"
 #include "util/coding.hpp"
 
-TEST(test_coding, base){
+TEST(coding, base){
   std::string str = "";
   EXPECT_EQ(Donkey::coding::to_str(11), "11");
   EXPECT_EQ(Donkey::coding::to_str(11.11), "11.11");

@@ -13,7 +13,7 @@
 #include "gtest/gtest.h"
 #include "util/random.hpp"
 
-TEST(test_random,base){
+TEST(random,base){
 
 
   EXPECT_NE(Donkey::random::uniform(), Donkey::random::uniform());

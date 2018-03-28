@@ -16,17 +16,17 @@
 #include <string>
 #include "util/coding.hpp"
 
-std::string s;
+std::string s_test_aop;
 struct AA
 {
   void before()
   {
-    s += "Before from AA;";
+    s_test_aop += "Before from AA;";
   }
 
   void after()
   {
-    s += "After from AA;";
+    s_test_aop += "After from AA;";
   }
 };
 
@@ -34,12 +34,12 @@ struct BB
 {
   void before()
   {
-    s += "Before from BB;";
+    s_test_aop += "Before from BB;";
   }
 
   void after()
   {
-    s += "After from BB;";
+    s_test_aop += "After from BB;";
   }
 };
 
@@ -47,12 +47,12 @@ struct CC
 {
   void before()
   {
-    s += "Before from CC;";
+    s_test_aop += "Before from CC;";
   }
 
   void after()
   {
-    s += "After from CC;";
+    s_test_aop += "After from CC;";
   }
 };
 
@@ -60,14 +60,14 @@ struct TT
 {
   void g()
   {
-    s += "real g function;";
+    s_test_aop += "real g function;";
   }
 
   void h(int a)
   {
-    s += "real h function";
-    s += Donkey::coding::to_str(a);
-    s += ";";
+    s_test_aop += "real h function";
+    s_test_aop += Donkey::coding::to_str(a);
+    s_test_aop += ";";
   }
 };
 
@@ -86,14 +86,14 @@ struct DD
 
 void GT()
 {
-  s += "real GT function;";
+  s_test_aop += "real GT function;";
 }
 
 void HT(int a)
 {
-  s += "real HT function";
-  s += Donkey::coding::to_str(a);
-  s += ";";
+  s_test_aop += "real HT function";
+  s_test_aop += Donkey::coding::to_str(a);
+  s_test_aop += ";";
 }
 
 
@@ -101,36 +101,36 @@ TEST(aop, base){
   TT tt;
   std::function<void()> ff = std::bind(&TT::g, &tt);
   //组合了两个切面AA BB
-  s = "";
+  s_test_aop = "";
   Donkey::invoke<AA,BB>([&ff](){ff();}); //织入成员函数
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "real g function;"
               "After from BB;"
               "After from AA;");
 
-  s = "";
+  s_test_aop = "";
   Donkey::invoke<AA,BB>([&tt](){tt.g();}); //织入对象
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "real g function;"
               "After from BB;"
               "After from AA;");
 
 
-  s = "";
+  s_test_aop = "";
   int aa = 3;
   Donkey::invoke<AA,BB>(&GT); //织入方法
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "real GT function;"
               "After from BB;"
               "After from AA;");
 
 
-  s = "";
+  s_test_aop = "";
   Donkey::invoke<AA,BB>([aa](){HT(aa);});//织入带参的方法
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "real HT function3;"
               "After from BB;"
@@ -138,9 +138,9 @@ TEST(aop, base){
 
   //织入带参数的成员函数和对象
   std::function<void(int)> ff1 = std::bind(&TT::h, &tt, std::placeholders::_1);
-  s = "";
+  s_test_aop = "";
   Donkey::invoke<AA,BB,CC,DD>([&ff1,aa](){ff1(aa);}); //组合了四个切面
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "Before from CC;"
               "real h function3;"
@@ -148,9 +148,9 @@ TEST(aop, base){
               "After from BB;"
               "After from AA;");
 
-  s = "";
+  s_test_aop = "";
   Donkey::invoke<AA,BB>([&tt,aa](){tt.h(aa);});
-  EXPECT_EQ(s,"Before from AA;"
+  EXPECT_EQ(s_test_aop,"Before from AA;"
               "Before from BB;"
               "real h function3;"
               "After from BB;"

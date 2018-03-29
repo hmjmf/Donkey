@@ -34,7 +34,7 @@ enum EnumMessage
 };
 
 template<int key, typename R, typename... Args>
-R Dispatch(Args... args)
+R dispatch(Args... args)
 {
   auto tpkey = std::make_tuple(Message1, Message2);
   auto tpval = std::make_tuple(Call1, Call2);
@@ -44,7 +44,7 @@ R Dispatch(Args... args)
 }
 
 TEST(message_dispatcher, base){
-  Dispatch<Message1, void>();
-  s_test_message_dispatcher += Donkey::coding::to_str(Dispatch<Message2, int>(1));
+  dispatch<Message1, void>();
+  s_test_message_dispatcher += Donkey::coding::to_str(dispatch<Message2, int>(1));
   EXPECT_EQ(s_test_message_dispatcher, "call11");
 }
